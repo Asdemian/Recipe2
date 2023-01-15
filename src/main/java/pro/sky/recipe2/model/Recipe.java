@@ -1,9 +1,10 @@
 package pro.sky.recipe2.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class Recipe {
-
     private String name;
     private String time;
 
