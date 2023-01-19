@@ -31,12 +31,12 @@ public class RecipeController {
     })
 @PostMapping
     public ResponseEntity<Recipe> add(@RequestBody Recipe recipe) {
-    if (!validateService.isNotValid(recipe)) {
+    if (validateService.isNotValid(recipe)) {
         return ResponseEntity.badRequest().build();
     }
     return ResponseEntity.ok(recipeService.add(recipe));
     }
-    @Operation(summary="Получение рецепта", description = "РЕЦЕПТЫ")
+    @Operation(summary="Получение рецепта", description = "РЕЦЕПТ")
     @GetMapping("{id}")
     public ResponseEntity<Recipe> get(@PathVariable long id) {
         return ResponseEntity.of(recipeService.get(id));
@@ -49,7 +49,7 @@ public class RecipeController {
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> update(@PathVariable long id,
                                              @RequestBody Recipe recipe) {
-        if (!validateService.isNotValid(recipe)) {
+        if (validateService.isNotValid(recipe)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.of(recipeService.update(id, recipe));
@@ -63,7 +63,7 @@ public class RecipeController {
     public ResponseEntity<Recipe> delete (@PathVariable long id) {
         return ResponseEntity.of(recipeService.delete(id));
     }
-    @Operation(summary="Получение рецепта", description = "РЕЦЕПТЫ")
+    @Operation(summary="Получение рецептов", description = "РЕЦЕПТЫ")
     @GetMapping
     public Map<Long, Recipe> getAll() {
         return recipeService.getAll();
