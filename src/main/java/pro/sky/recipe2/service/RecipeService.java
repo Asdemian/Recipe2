@@ -64,8 +64,8 @@ public class RecipeService {
     }
 
     public Optional<Recipe> update(long id, Recipe recipe) {
-       Optional<Recipe> result = Optional.ofNullable(recipes.replace(id, recipe));
-       writeToFile();
+        Optional<Recipe> result = Optional.ofNullable(recipes.replace(id, recipe));
+        writeToFile();
         return result;
     }
 
@@ -77,5 +77,24 @@ public class RecipeService {
 
     public Map<Long, Recipe> getAll() {
         return new HashMap<>(recipes);
+    }
+
+    @Nullable
+    public byte[] download() {
+        try {
+            return Files.readAllBytes(pathToFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void importData(byte[] data) {
+        try {
+            Files.write(pathToFile, data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

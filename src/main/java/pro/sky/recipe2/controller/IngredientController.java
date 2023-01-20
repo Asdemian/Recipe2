@@ -6,12 +6,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pro.sky.recipe2.model.Ingredient;
 import pro.sky.recipe2.service.IngredientService;
 import pro.sky.recipe2.service.ValidateService;
 
+import java.io.IOException;
 import java.util.Map;
-@Tag(name="ИНГРЕДИЕНТЫ controller", description = "API для ингредиентов")
+
+@Tag(name = "ИНГРЕДИЕНТЫ controller", description = "API для ингредиентов")
 @RestController
 @RequestMapping("/ingredient")
 public class IngredientController {
@@ -24,10 +27,11 @@ public class IngredientController {
         this.ingredientService = ingredientService;
         this.validateService = validateService;
     }
-    @Operation(summary="Добавление ингредиента", description = "ДОБАВЛЕНИЕ")
+
+    @Operation(summary = "Добавление ингредиента", description = "ДОБАВЛЕНИЕ")
     @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "Изменилось"),
-            @ApiResponse(responseCode = "400",description = "Облом")
+            @ApiResponse(responseCode = "200", description = "Изменилось"),
+            @ApiResponse(responseCode = "400", description = "Облом")
     })
     @PostMapping
     public ResponseEntity<Ingredient> add(@RequestBody Ingredient ingredient) {
@@ -36,15 +40,17 @@ public class IngredientController {
         }
         return ResponseEntity.ok(ingredientService.add(ingredient));
     }
-    @Operation(summary="Получение ингредиента", description = "ИНГРЕДИЕНТЫ")
+
+    @Operation(summary = "Получение ингредиента", description = "ИНГРЕДИЕНТЫ")
     @GetMapping("{id}")
     public ResponseEntity<Ingredient> get(@PathVariable long id) {
         return ResponseEntity.of(ingredientService.get(id));
     }
-    @Operation(summary="Изменение ингредиента", description = "ИЗМЕНЕНИЕ")
+
+    @Operation(summary = "Изменение ингредиента", description = "ИЗМЕНЕНИЕ")
     @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "Изменилось"),
-            @ApiResponse(responseCode = "400",description = "Облом")
+            @ApiResponse(responseCode = "200", description = "Изменилось"),
+            @ApiResponse(responseCode = "400", description = "Облом")
     })
     @PutMapping("/{id}")
     public ResponseEntity<Ingredient> update(@PathVariable long id,
@@ -54,19 +60,29 @@ public class IngredientController {
         }
         return ResponseEntity.of(ingredientService.update(id, ingredient));
     }
-    @Operation(summary="Удаление ингредиента", description = "УДАЛЕНИЕ")
+
+    @Operation(summary = "Удаление ингредиента", description = "УДАЛЕНИЕ")
     @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "Изменилось"),
-            @ApiResponse(responseCode = "400",description = "Облом")
+            @ApiResponse(responseCode = "200", description = "Изменилось"),
+            @ApiResponse(responseCode = "400", description = "Облом")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Ingredient> delete(@PathVariable long id) {
         return ResponseEntity.of(ingredientService.delete(id));
     }
-    @Operation(summary="Получение ингредиента", description = "ИНГРЕДИЕНТЫ")
+
+    @Operation(summary = "Получение ингредиента", description = "ИНГРЕДИЕНТЫ")
     @GetMapping
     public Map<Long, Ingredient> getAll() {
         return IngredientService.getAll();
+    }
+    @PostMapping("/import")
+    public void importData(@RequestParam("fileIngredient") MultipartFile multipartFile) {
+        try {
+            ingredientService.importData(multipartFile.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
