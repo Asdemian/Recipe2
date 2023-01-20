@@ -1,0 +1,12 @@
+GET http://localhost:8080/recipe
+###
+POST http://localhost:8080/recipe/import
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+
+--WebAppBoundary
+Content-Disposition: form-data; name="fileRecipe"; filename="importRecipe.json"
+Content-Type: application/json
+
+< ./importRecipe.json
+--WebAppBoundary--
