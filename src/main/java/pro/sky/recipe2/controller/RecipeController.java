@@ -88,6 +88,19 @@ public class RecipeController {
         }
         return ResponseEntity.ok()
                 .contentLength(data.length)
+                .contentType(MediaType.TEXT_PLAIN)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"recipes.txt\"")
+                .body(data);
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> export() {
+        byte[] data = recipeService.export();
+        if (data == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok()
+                .contentLength(data.length)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"recipes.json\"")
                 .body(data);
@@ -101,4 +114,6 @@ public class RecipeController {
             e.printStackTrace();
         }
     }
+
+
 }
